@@ -28,5 +28,5 @@ jobs:
         env:
           PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          poetry build
-          poetry publish --build -u __token__ -p $PYPI_API_TOKEN
+          poetry build --verbose
+          poetry publish --build -u __token__ -p $PYPI_API_TOKEN --verbose
