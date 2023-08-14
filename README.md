@@ -230,10 +230,11 @@ In no particular order:
 
 - [x] Add serverless lambda microservice API with one-click deployment
 - [x] Add SDK for API
-- [ ] Add dynamic scaling of uniform planes
-  - [ ] Handle DynamoDB item size limits (400KB)
+- [ ] Add dynamic scaling of uniform planes when lower bit buckets hit capacity
+- [ ] Handle DynamoDB item size limits (400KB) - Need to either spill over to secondary keys or skip and archive key
 - [ ] Add CLI tool with API
 - [ ] Add support for attribute filtering
+- [ ] Add endpoint for embedding text with small HuggingFace models and inserting automatically
 - [ ] Performance benchmarking
 - [ ] Additional testing
 
