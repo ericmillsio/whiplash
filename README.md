@@ -17,11 +17,11 @@ There are several main components to Whiplash:
 ### Library
 
 ```bash
-pip install whiplash
+pip install whiplash-client
 
 # OR
 
-poetry add whiplash
+poetry add whiplash-client
 ```
 
 ### Serverless API (AWS)

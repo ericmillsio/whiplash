@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "whiplash-client"
-version = "0.1.0"
+version = "0.1.1"
 description = "Blazing-fast lightweight vector store on top of DynamoDB"
 authors = ["Eric Mills <ericmills2@gmail.com>"]
 license = "MIT"
