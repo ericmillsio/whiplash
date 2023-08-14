@@ -233,6 +233,7 @@ In no particular order:
 - [ ] Handle DynamoDB item size limits (400KB) - Need to either spill over to secondary keys or skip and archive key
 - [ ] Add CLI tool with API
 - [ ] Add support for attribute filtering
+- [ ] Add endpoint for embedding text with small HuggingFace models and inserting automatically
 - [ ] Performance benchmarking
 - [ ] Additional testing
 
