@@ -28,7 +28,8 @@ poetry add whiplash-client
 
 ```bash
 npm install -g serverless
-# Go to project directory
+serverless install --url https://github.com/ericmillsio/whiplash
+cd whiplash
 npm install
 ```
 
