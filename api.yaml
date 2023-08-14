@@ -1,0 +1,141 @@
+openapi: 3.0.0
+info:
+  title: Whiplash API
+  version: 1.0.0
+paths:
+  /projects/{projectId}:
+    get:
+      summary: Get Project
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+  /projects:
+    post:
+      summary: Create Project
+      responses:
+        "200":
+          description: Successful response
+    get:
+      summary: List Projects
+      responses:
+        "200":
+          description: Successful response
+  /projects/{projectId}/collections:
+    post:
+      summary: Create Collection
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+    get:
+      summary: List Collections
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+  /projects/{projectId}/collections/{collectionId}:
+    get:
+      summary: Get Collection
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: collectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+  /projects/{projectId}/collections/{collectionId}/items:
+    post:
+      summary: Create Item
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: collectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+  /projects/{projectId}/collections/{collectionId}/items/batch:
+    post:
+      summary: Create Items Batch
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: collectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+  /projects/{projectId}/collections/{collectionId}/items/{itemId}:
+    get:
+      summary: Get Item
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: collectionId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: itemId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+  /projects/{projectId}/collections/{collectionId}/search:
+    get:
+      summary: Search Items
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: collectionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response

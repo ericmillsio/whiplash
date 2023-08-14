@@ -1,0 +1,171 @@
+service: whiplash
+frameworkVersion: "3"
+useDotenv: true
+
+provider:
+  name: aws
+  profile: ${env:AWS_PROFILE}
+  region: ${opt:region, "us-east-2"}
+  stage: ${opt:stage, "dev"}
+  runtime: python3.11
+  architecture: arm64
+  memorySize: 256
+  timeout: 10
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "dynamodb:*"
+          Resource: "*"
+  environment:
+    # Base Config
+    REGION: ${self:provider.region}
+    STAGE: ${self:provider.stage}
+    BASE_URL: !Join
+      - ""
+      - - "https://"
+        - !Ref ApiGatewayRestApi
+        - ".execute-api."
+        - ${self:provider.region}
+        - ".amazonaws.com"
+    # Whiplash Default Config
+    MAX_ITEMS_PER_BUCKET: ${env:MAX_ITEMS_PER_BUCKET}
+    DEFAULT_N_PLANES: ${env:DEFAULT_N_PLANES}
+    DEFAULT_BIT_START: ${env:DEFAULT_BIT_START}
+    DEFAULT_BIT_SCALE_FACTOR: ${env:DEFAULT_BIT_SCALE_FACTOR}
+
+  apiGateway:
+    apiKeys:
+      - ${self:provider.stage}-api-key
+functions:
+  ###################
+  # Projects
+  ###################
+  getProject:
+    handler: whiplash/api/projects.get
+    events:
+      - http:
+          path: /projects/{projectId}
+          method: get
+          cors: true
+          private: true
+  listProjects:
+    handler: whiplash/api/projects.all
+    events:
+      - http:
+          path: /projects
+          method: get
+          cors: true
+          private: true
+
+  ###################
+  # Collections
+  ###################]
+  createCollection:
+    handler: whiplash/api/collections.create
+    events:
+      - http:
+          path: /projects/{projectId}/collections
+          method: post
+          cors: true
+          private: true
+  listCollections:
+    handler: whiplash/api/collections.all
+    events:
+      - http:
+          path: /projects/{projectId}/collections
+          method: get
+          cors: true
+          private: true
+  getCollection:
+    handler: whiplash/api/collections.get
+    events:
+      - http:
+          path: /projects/{projectId}/collections/{collectionId}
+          method: get
+          cors: true
+          private: true
+
+  ###################
+  # Items
+  ###################
+  createItem:
+    handler: whiplash/api/items.create
+    events:
+      - http:
+          path: /projects/{projectId}/collections/{collectionId}/items
+          method: post
+          cors: true
+          private: true
+  createItems:
+    handler: whiplash/api/items.create_batch
+    timeout: 30
+    events:
+      - http:
+          path: /projects/{projectId}/collections/{collectionId}/items/batch
+          method: post
+          cors: true
+          private: true
+  getItem:
+    handler: whiplash/api/items.get
+    events:
+      - http:
+          path: /projects/{projectId}/collections/{collectionId}/items/{itemId}
+          method: get
+          cors: true
+          private: true
+  searchItems:
+    handler: whiplash/api/items.search
+    events:
+      - http:
+          path: /projects/{projectId}/collections/{collectionId}/search
+          method: post
+          cors: true
+          private: true
+
+resources:
+  Resources:
+    WhiplashMetadataTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: whiplash_metadata
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+plugins:
+  - serverless-python-requirements
+package:
+  patterns:
+    - "!**/**"
+    - "whiplash/**"
+    - "!**/.pytest_cache/**"
+    - "!**/__pycache__/**"
+
+custom:
+  pythonRequirements:
+    usePoetry: true
+    slim: true
+    strip: false
+    dockerizePip: non-linux
+    dockerRunCmdExtraArgs: ["--platform", "linux/arm64/v8"]
+    dockerImage: public.ecr.aws/sam/build-python3.11:latest-arm64
+    noDeploy:
+      # Packages available in runtime
+      # https://github.com/UnitedIncome/serverless-python-requirements/issues/304
+      - boto3
+      - botocore
+      - docutils
+      - jmespath
+      - python-dateutil
+      - s3transfer
+      - six
+      - pip
+      - urllib3
+      # Deprecated package
+      - dataclasses
