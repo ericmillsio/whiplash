@@ -1,3 +1,5 @@
+This project is super early, not ready for production.
+
 # Whiplash
 
 Serverless, lightweight, and fast vector store on top of DynamoDB
